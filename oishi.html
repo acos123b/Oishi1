@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Oishi! 🎉 | Madam Ji</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FFFDF9',
+                        blush: '#FFEFF2',
+                        softPink: '#FFD6E0',
+                        rose: '#FF8DA1',
+                        deepRose: '#E05275',
+                        lavender: '#E8DFF5',
+                        gold: '#F59E0B',
+                        softDark: '#2D2329'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        script: ['Dancing Script', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #FFFDF9 0%, #FFEFF2 40%, #E8DFF5 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .font-script { font-family: 'Dancing Script', cursive; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+
+        .sparkle-bg {
+            background-image: radial-gradient(rgba(220, 130, 160, 0.15) 1.5px, transparent 0);
+            background-size: 24px 24px;
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        .animate-float {
+            animation: floatSlow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { filter: drop-shadow(0 0 12px rgba(255, 141, 161, 0.5)); }
+            50% { filter: drop-shadow(0 0 22px rgba(245, 158, 11, 0.7)); }
+        }
+
+        .glow-effect {
+            animation: pulseGlow 3s infinite;
+        }
+
+        /* Card flip effect */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FFEFF2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FF8DA1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="text-softDark sparkle-bg relative min-h-screen flex flex-col justify-between selection:bg-rose selection:text-white">
+
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" id="fairyLights">
+        <div class="absolute top-10 left-[8%] text-rose/30 animate-pulse text-2xl"><i class="fa-solid fa-sparkles"></i></div>
+        <div class="absolute top-1/4 right-[8%] text-deepRose/25 animate-float text-3xl"><i class="fa-solid fa-heart"></i></div>
+        <div class="absolute bottom-1/3 left-[5%] text-gold/30 animate-pulse text-xl"><i class="fa-solid fa-star"></i></div>
+        <div class="absolute bottom-12 right-[10%] text-rose/30 animate-float text-3xl"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+    </div>
+
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-rose/10 py-3 px-4 shadow-sm">
+        <div class="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-deepRose animate-ping"></span>
+                <h1 class="font-serif font-bold text-base sm:text-lg text-deepRose tracking-tight">Oishi's Day ✨</h1>
+                <span class="text-xs px-2 py-0.5 bg-rose/10 text-deepRose rounded-full font-semibold">2nd October</span>
+            </div>
+            
+            <!-- Step Indicators -->
+            <div class="flex items-center gap-1 overflow-x-auto max-w-full pb-1 sm:pb-0 text-[11px] font-semibold" id="stepIndicator">
+                <span id="stepCounterText" class="text-deepRose bg-rose/10 px-3 py-1 rounded-full font-bold">
+                    Step 1 of 10
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-2xl mx-auto px-4 py-6 w-full flex-grow flex flex-col justify-center relative z-10">
+
+        <!-- ================= STEP 1: The Birthday Envelope ================= -->
+        <section id="step1" class="step-container transition-all duration-500 text-center my-auto">
+            <div class="inline-block bg-rose/15 text-deepRose text-xs font-bold px-4 py-1.5 rounded-full mb-4 border border-rose/20">
+                🎀 Special Delivery for Cutiee 🎀
+            </div>
+            <h2 class="font-serif text-3xl sm:text-5xl font-bold text-softDark mb-3 leading-tight">
+                Happy Birthday, <span class="text-deepRose font-script text-4xl sm:text-6xl block sm:inline">Madam Ji</span>
+            </h2>
+            <p class="text-gray-600 text-xs sm:text-sm max-w-md mx-auto mb-8 leading-relaxed">
+                Today is October 2nd, the most special day! Tap the envelope below to open your personalized interactive birthday journey!
+            </p>
+
+            <div class="relative max-w-xs mx-auto mb-8 cursor-pointer group" onclick="openEnvelope()">
+                <div id="envelopeBox" class="w-52 h-40 sm:w-60 sm:h-44 mx-auto bg-gradient-to-br from-rose to-deepRose rounded-2xl shadow-xl flex flex-col items-center justify-center relative transform group-hover:scale-105 transition-all duration-300 glow-effect text-white p-4">
+                    <div class="text-4xl mb-2 group-hover:rotate-12 transition-transform duration-300">
+                        <i class="fa-solid fa-envelope-open-text"></i>
+                    </div>
+                    <span class="font-bold text-sm bg-black/20 px-3 py-1 rounded-full border border-white/30">
+                        Tap to Open Sealed Letter 💌
+                    </span>
+                </div>
+            </div>
+
+            <p class="text-xs text-gray-400 italic">Crafted with endless warmth & love ✨</p>
+        </section>
+
+        <!-- ================= STEP 2: Bestie Vibe Check (Quiz) ================= -->
+        <section id="step2" class="step-container hidden transition-all duration-500">
+            <div class="text-center mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-deepRose">Interface 02</span>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-softDark mt-1">Bestie Vibe Check 💖</h2>
+                <p class="text-gray-600 text-xs sm:text-sm mt-1">Answer these 3 quick fun questions, Madam Ji!</p>
+            </div>
+
+            <div class="bg-white/90 backdrop-blur-md rounded-3xl p-5 sm:p-7 shadow-xl border border-rose/20 space-y-6 mb-8">
+                <!-- Q1 -->
+                <div>
+                    <p class="font-bold text-xs sm:text-sm text-softDark mb-2">1. Who makes who laugh more during random talks?</p>
+                    <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+                        <button onclick="answerQuiz(this, 'Correct! Madam Ji has the ultimate sense of humor! 😂')" class="p-3 rounded-xl border border-rose/20 hover:bg-blush text-left transition-all">
+                            ✨ Cutiee
+                        </button>
+                        <button onclick="answerQuiz(this, 'Equal laughs & double trouble always! 😄')" class="p-3 rounded-xl border border-rose/20 hover:bg-blush text-left transition-all">
+                            ✨ Me
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div>
+                    <p class="font-bold text-xs sm:text-sm text-softDark mb-2">2. What is Oishi's super secret power?</p>
+                    <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+                        <button onclick="answerQuiz(this, '100% True! Being the sweetest sister ever! 🌸')" class="p-3 rounded-xl border border-rose/20 hover:bg-blush text-left transition-all">
+                            👑 Infinite Cute Vibes
+                        </button>
+                        <button onclick="answerQuiz(this, 'Spot on! Brightens up any mood instantly! 🌟')" class="p-3 rounded-xl border border-rose/20 hover:bg-blush text-left transition-all">
+                            🌟 Instant Mood Lifter
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div>
+                    <p class="font-bold text-xs sm:text-sm text-softDark mb-2">3. Is Cutiee officially the most precious bestie?</p>
+                    <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+                        <button onclick="answerQuiz(this, 'Yes! Absolutely no doubt about it! ❤️')" class="p-3 rounded-xl border border-rose/20 hover:bg-blush text-left transition-all">
+                            💯 Yes, Absolutely!
+                        </button>
+                        <button onclick="answerQuiz(this, 'Double Yes! Best sister forever! 💖')" class="p-3 rounded-xl border border-rose/20 hover:bg-blush text-left transition-all">
+                            💖 Yes x1000!
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quizFeedback" class="hidden text-xs font-semibold text-deepRose bg-blush p-3 rounded-xl text-center animate-pulse"></div>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <button onclick="goToStep(1)" class="px-4 py-2 rounded-full border border-gray-300 text-gray-600 text-xs font-semibold hover:bg-gray-100">
+                    ← Back
+                </button>
+                <button onclick="goToStep(3)" class="px-6 py-2.5 rounded-full bg-deepRose text-white text-xs font-bold shadow-md hover:bg-rose transition-all flex items-center gap-2">
+                    Forever Meter <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= STEP 3: Forever Meter Slider ================= -->
+        <section id="step3" class="step-container hidden transition-all duration-500">
+            <div class="text-center mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-deepRose">Interface 03</span>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-softDark mt-1">The Forever Meter ♾️</h2>
+                <p class="text-gray-600 text-xs sm:text-sm mt-1">Scroll to tell how many years you promise to stay with me!</p>
+            </div>
+
+            <div class="bg-white/90 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-xl border border-rose/20 text-center mb-8">
+                <div class="mb-6">
+                    <div class="text-4xl sm:text-5xl font-extrabold text-deepRose font-serif mb-2" id="foreverValue">100 Years</div>
+                    <p class="text-xs sm:text-sm font-semibold text-gray-700" id="foreverLabel">Deal! Forever & Ever, Madam Ji! 💖</p>
+                </div>
+
+                <div class="relative mb-6 px-2">
+                    <input type="range" min="1" max="100" value="100" id="foreverSlider" oninput="updateForeverMeter(this.value)"
+                           class="w-full h-3 bg-rose/20 rounded-lg appearance-none cursor-pointer accent-deepRose">
+                    <div class="flex justify-between text-xs font-medium text-gray-400 mt-2">
+                        <span>1 Year</span>
+                        <span>50 Years</span>
+                        <span>Forever & Ever ♾️</span>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-blush/60 rounded-2xl border border-rose/10 text-xs sm:text-sm text-gray-700 leading-relaxed italic" id="foreverDescription">
+                    "From silly jokes to supporting each other like real siblings, Cutiee makes every single year so bright!"
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <button onclick="goToStep(2)" class="px-4 py-2 rounded-full border border-gray-300 text-gray-600 text-xs font-semibold hover:bg-gray-100">
+                    ← Back
+                </button>
+                <button onclick="goToStep(4)" class="px-6 py-2.5 rounded-full bg-deepRose text-white text-xs font-bold shadow-md hover:bg-rose transition-all flex items-center gap-2">
+                    Pinky Promise <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= STEP 4: Pinky Promise Contract Page ================= -->
+        <section id="step4" class="step-container hidden transition-all duration-500">
+            <div class="text-center mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-deepRose">Interface 04</span>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-softDark mt-1">Pinky Promise Contract 📜</h2>
+                <p class="text-gray-600 text-xs sm:text-sm mt-1">Official Bestie & Sister Contract for Oishi</p>
+            </div>
+
+            <div class="bg-amber-50/90 border-2 border-gold/40 rounded-3xl p-5 sm:p-7 shadow-xl relative overflow-hidden mb-8">
+                <div class="border-b border-gold/30 pb-3 mb-4 flex items-center justify-between">
+                    <span class="font-bold text-[11px] uppercase tracking-wider text-amber-900">Contract #OCT-02-OISHI</span>
+                    <span class="text-[11px] text-amber-700 font-semibold">Status: Pending Seal</span>
+                </div>
+
+                <div class="space-y-3 text-xs sm:text-sm text-amber-950 mb-6 font-medium">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" checked class="mt-1 w-4 h-4 accent-gold rounded">
+                        <span><strong>Clause 1:</strong> Always remain as sweet, cheerful, and charming as Cutiee!</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" checked class="mt-1 w-4 h-4 accent-gold rounded">
+                        <span><strong>Clause 2:</strong> Treat me as your closest best friend and sibling forever.</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" checked class="mt-1 w-4 h-4 accent-gold rounded">
+                        <span><strong>Clause 3:</strong> Promise to stay together for <strong id="contractYearsDisplay" class="text-deepRose font-bold">100 Years</strong>!</span>
+                    </label>
+                </div>
+
+                <div id="contractSignedBadge" class="hidden my-3 p-3 bg-emerald-100 border border-emerald-300 rounded-xl text-center text-emerald-800 font-bold text-xs animate-bounce">
+                    🎉 PROMISE SEALED & SIGNED BY OISHI! 🎉
+                </div>
+
+                <button id="signPromiseBtn" onclick="sealPromise()" class="w-full py-3.5 bg-gradient-to-r from-gold to-amber-500 text-white rounded-2xl font-bold text-xs sm:text-sm shadow-md hover:opacity-95 transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-signature"></i> Seal Pinky Promise ✨
+                </button>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <button onclick="goToStep(3)" class="px-4 py-2 rounded-full border border-gray-300 text-gray-600 text-xs font-semibold hover:bg-gray-100">
+                    ← Back
+                </button>
+                <button onclick="goToStep(5)" class="px-6 py-2.5 rounded-full bg-deepRose text-white text-xs font-bold shadow-md hover:bg-rose transition-all flex items-center gap-2">
+                    Fortune Crystal <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= STEP 5: Crystal Ball Blessing ================= -->
+        <section id="step5" class="step-container hidden transition-all duration-500 text-center">
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-deepRose">Interface 05</span>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-softDark mt-1">Fortune Crystal Ball 🔮</h2>
+                <p class="text-gray-600 text-xs sm:text-sm mt-1">Tap the glowing crystal ball to reveal a sweet fortune for Madam Ji!</p>
+            </div>
+
+            <div class="bg-white/90 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-xl border border-rose/20 mb-8">
+                <div onclick="revealFortune()" class="w-36 h-36 sm:w-44 sm:h-44 mx-auto rounded-full bg-gradient-to-tr from-indigo-300 via-rose to-amber-200 p-1 cursor-pointer glow-effect transform hover:scale-105 transition-all flex items-center justify-center mb-6">
+                    <div class="w-full h-full rounded-full bg-slate-900/90 backdrop-blur-md flex flex-col items-center justify-center text-white p-4">
+                        <i class="fa-solid fa-crystal-ball text-4xl text-amber-300 mb-2 animate-bounce"></i>
+                        <span class="text-[11px] text-amber-200 font-semibold">Tap to Reveal 🔮</span>
+                    </div>
+                </div>
+
+                <div id="fortuneBox" class="p-4 bg-blush/60 rounded-2xl border border-rose/20 text-xs sm:text-sm text-deepRose font-bold leading-relaxed min-h-[60px] flex items-center justify-center">
+                    ✨ Tap the crystal ball above to awaken Madam Ji's fortune!
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <button onclick="goToStep(4)" class="px-4 py-2 rounded-full border border-gray-300 text-gray-600 text-xs font-semibold hover:bg-gray-100">
+                    ← Back
+                </button>
+                <button onclick="goToStep(6)" class="px-6 py-2.5 rounded-full bg-deepRose text-white text-xs font-bold shadow-md hover:bg-rose transition-all flex items-center gap-2">
+                    Special Cards <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= STEP 6: Reasons Why Cutiee is Special ================= -->
+        <section id="step6" class="step-container hidden transition-all duration-500">
+            <div class="text-center mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-deepRose">Interface 06</span>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-softDark mt-1">Why Oishi is Special 💌</h2>
+                <p class="text-gray-600 text-xs sm:text-sm mt-1">Tap each card to reveal sweet reasons!</p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8" id="reasonsGrid">
+                <!-- Flappable cards injected via JS -->
+            </div>
+
+            <div class="flex justify-between items-center">
+                <button onclick="goToStep(5)" class="px-4 py-2 rounded-full border border-gray-300 text-gray-600 text-xs font-semibold hover:bg-gray-100">
+                    ← Back
+                </button>
+                <button onclick="goToStep(7)" class="px-6 py-2.5 rounded-full bg-deepRose text-white text-xs font-bold shadow-md hover:bg-rose transition-all flex items-center gap-2">
+                    Birthday Cake <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= STEP 7: Birthday Cake & Candle Blowout ================= -->
+        <section id="step7" class="step-container hidden transition-all duration-500 text-center">
+            <div class="mb-4">
+                <span class="text-xs font-bold uppercase tracking-widest text-deepRose">Interface 07</span>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-softDark mt-1">Blow The Candle! 🎂</h2>
+                <p class="text-gray-600 text-xs sm:text-sm mt-1">Make a wish and blow out the candle flame!</p>
+            </div>
+
+            <div class="relative max-w-xs mx-auto mb-6 py-2">
+                <div class="w-44 h-44 sm:w-52 sm:h-52 mx-auto relative flex flex-col items-center justify-end">
+                    
+                    <!-- Candle -->
+                    <div class="relative z-20 mb-[-4px] flex flex-col items-center">
+                        <div id="candleFlame" onclick="blowCandle()" class="w-5 h-7 bg-gradient-to-t from-gold via-orange-400 to-yellow-200 rounded-full cursor-pointer animate-pulse shadow-[0_0_18px_#f59e0b]"></div>
+                        <div class="w-2.5 h-10 bg-gradient-to-r from-pink-300 via-rose-200 to-pink-300 rounded-t-sm shadow-inner"></div>
+                    </div>
+
+                    <!-- Top Cake Tier -->
+                    <div class="w-32 h-14 bg-gradient-to-r from-pink-200 via-blush to-pink-200 rounded-t-3xl border-b-4 border-rose/30 shadow-md relative z-10 flex items-center justify-center">
+                        <span class="text-xs font-script text-deepRose font-bold">Oishi ✨</span>
+                    </div>
+                    <!-- Bottom Cake Tier -->
+                    <div class="w-44 sm:w-48 h-16 bg-gradient-to-r from-rose to-deepRose rounded-t-3xl shadow-lg border-b-6 border-rose-800 flex items-center justify-center">
+                        <span class="text-white/90 text-[11px] font-semibold tracking-wider uppercase">Madam Ji</span>
+                    </div>
+                    <!-- Cake Plate -->
+                    <div class="w-56 sm:w-60 h-3 bg-gray-200 rounded-full shadow-md"></div>
+                </div>
+            </div>
+
+            <div class="space-y-3 mb-8">
+                <button id="blowBtn" onclick="blowCandle()" class="px-7 py-3 bg-gradient-to-r from-rose to-deepRose text-white font-bold text-xs sm:text-sm rounded-full shadow-lg hover:shadow-xl transition-all">
+                    🌬️ Tap Flame or Click to Blow Candle!
+                </button>
+                <div id="wishMessage" class="hidden text-xs sm:text-sm font-semibold text-deepRose bg-white/90 p-3.5 rounded-2xl border border-rose/20 max-w-md mx-auto shadow-sm leading-relaxed">
+                    🎉 Happy Birthday, Cutiee! May your year ahead be as beautiful and sweet as you are! ✨💖
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <button onclick="goToStep(6)" class="px-4 py-2 rounded-full border border-gray-300 text-gray-600 text-xs font-semibold hover:bg-gray-100">
+                    ← Back
+                </button>
+                <button onclick="goToStep(8)" class="px-6 py-2.5 rounded-full bg-deepRose text-white text-xs font-bold shadow-md hover:bg-rose transition-all flex items-center gap-2">
+                    Love & Hugs <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= STEP 8: Virtual Hug & High-Five Meter ================= -->
+        <section id="step8" class="step-container hidden transition-all duration-500 text-center">
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-deepRose">Interface 08</span>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-softDark mt-1">Hug & High-Five Counter 🤗</h2>
+                <p class="text-gray-600 text-xs sm:text-sm mt-1">Send infinite virtual hugs and headpats to Cutiee!</p>
+            </div>
+
+            <div class="bg-white/90 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-xl border border-rose/20 mb-8">
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="p-4 bg-blush rounded-2xl border border-rose/10">
+                        <div class="text-3xl sm:text-4xl font-black text-deepRose mb-1" id="hugCount">0</div>
+                        <div class="text-xs font-bold text-gray-600">Warm Hugs Sent</div>
+                    </div>
+                    <div class="p-4 bg-lavender/50 rounded-2xl border border-indigo-100">
+                        <div class="text-3xl sm:text-4xl font-black text-indigo-600 mb-1" id="headpatCount">0</div>
+                        <div class="text-xs font-bold text-gray-600">Headpats Given</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-3">
+                    <button onclick="addLove('hug')" class="px-5 py-3 bg-rose hover:bg-deepRose text-white font-bold text-xs sm:text-sm rounded-2xl shadow-md transition-all flex items-center gap-2 active:scale-95">
+                        🤗 Send Hug
+                    </button>
+                    <button onclick="addLove('headpat')" class="px-5 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-xs sm:text-sm rounded-2xl shadow-md transition-all flex items-center gap-2 active:scale-95">
+                        🖐️ Give Headpat
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <button onclick="goToStep(7)" class="px-4 py-2 rounded-full border border-gray-300 text-gray-600 text-xs font-semibold hover:bg-gray-100">
+                    ← Back
+                </button>
+                <button onclick="goToStep(9)" class="px-6 py-2.5 rounded-full bg-deepRose text-white text-xs font-bold shadow-md hover:bg-rose transition-all flex items-center gap-2">
+                    Wish Box <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= STEP 9: The Birthday Wish Box ================= -->
+        <section id="step9" class="step-container hidden transition-all duration-500 text-center">
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-deepRose">Interface 09</span>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-softDark mt-1">Secret Birthday Wish 🌠</h2>
+                <p class="text-gray-600 text-xs sm:text-sm mt-1">Write your birthday wish, Madam Ji, and send it to the stars!</p>
+            </div>
+
+            <div class="bg-white/90 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-xl border border-rose/20 mb-8">
+                <textarea id="userWishText" rows="3" placeholder="Type your secret birthday wish here..." 
+                          class="w-full p-4 rounded-2xl border border-rose/30 focus:outline-none focus:ring-2 focus:ring-rose/50 text-xs sm:text-sm text-softDark mb-4 resize-none"></textarea>
+
+                <button onclick="sendWishToUniverse()" id="sendWishBtn" class="w-full py-3.5 bg-gradient-to-r from-indigo-500 via-rose to-deepRose text-white font-bold text-xs sm:text-sm rounded-2xl shadow-md hover:opacity-95 transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> Send Wish To The Universe 🌠
+                </button>
+
+                <div id="wishSentAlert" class="hidden mt-4 p-3 bg-purple-100 border border-purple-300 rounded-xl text-xs font-bold text-purple-800 animate-pulse">
+                    ✨ Your wish has flown into the star universe! It will come true! ✨
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <button onclick="goToStep(8)" class="px-4 py-2 rounded-full border border-gray-300 text-gray-600 text-xs font-semibold hover:bg-gray-100">
+                    ← Back
+                </button>
+                <button onclick="goToStep(10)" class="px-6 py-2.5 rounded-full bg-deepRose text-white text-xs font-bold shadow-md hover:bg-rose transition-all flex items-center gap-2">
+                    Grand Finale <i class="fa-solid fa-gift"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= STEP 10: Grand Finale ================= -->
+        <section id="step10" class="step-container hidden transition-all duration-500 text-center">
+            <div class="inline-block bg-rose/15 text-deepRose text-xs font-bold px-4 py-1.5 rounded-full mb-3 border border-rose/20">
+                🎉 October 2nd Special Finale 🎉
+            </div>
+            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-softDark mb-3">
+                Happy Birthday, <span class="text-deepRose font-script text-4xl sm:text-5xl">Oishi</span>!
+            </h2>
+
+            <div class="bg-white/90 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-xl border border-rose/20 mb-8 max-w-lg mx-auto text-left leading-relaxed text-xs sm:text-sm text-gray-700 space-y-3">
+                <p>
+                    Dearest <strong>Madam Ji</strong>,
+                </p>
+                <p>
+                    Having you as my best friend and like my own sister is one of the greatest blessings. You bring so much light, sweetness, and comfort into my life.
+                </p>
+                <p>
+                    I hope today on your birthday, you get all the happiness, laughter, and success in the world. Always remain as sweet, genuine, and cheerful as <strong>Cutiee</strong>!
+                </p>
+                <p class="font-bold text-deepRose text-right font-script text-lg">
+                    — Besties & Siblings Forever 💖
+                </p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3">
+                <button onclick="triggerConfettiExplosion()" class="px-6 py-3 bg-gradient-to-r from-rose to-deepRose text-white font-bold text-xs sm:text-sm rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
+                    🎉 Celebrate & Shower Confetti
+                </button>
+                <button onclick="goToStep(1)" class="px-5 py-3 bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 rounded-full text-xs font-bold shadow-sm transition-all">
+                    🔄 Replay Journey
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        let currentStep = 1;
+        let selectedYears = 100;
+        let hugCount = 0;
+        let headpatCount = 0;
+        let isCandleBlown = false;
+
+        const reasons = [
+            { title: "Sweetest Soul 🌸", text: "You always treat everyone with pure warmth and kindness!" },
+            { title: "Infectious Laugh 😂", text: "Your smile and laugh can turn any bad day into a bright one!" },
+            { title: "Sister Bond 👫", text: "You aren't just a best friend, you are like real family to me!" },
+            { title: "Always Caring 💖", text: "Cutiee always checks up and cares genuinely!" },
+            { title: "Best Listener 👂", text: "Madam Ji always listens patiently without any judgment!" },
+            { title: "Irreplaceable ✨", text: "There is truly nobody like Oishi in the entire world!" }
+        ];
+
+        function renderReasons() {
+            const grid = document.getElementById('reasonsGrid');
+            grid.innerHTML = '';
+
+            reasons.forEach((r, idx) => {
+                const card = document.createElement('div');
+                card.className = 'perspective-1000 h-28 cursor-pointer';
+                card.onclick = () => {
+                    const inner = card.querySelector('.card-inner');
+                    inner.classList.toggle('rotate-y-180');
+                };
+
+                card.innerHTML = `
+                    <div class="card-inner relative w-full h-full transform-style-3d transition-transform duration-500 rounded-2xl shadow-md">
+                        <div class="absolute inset-0 bg-white border border-rose/20 rounded-2xl p-3 flex flex-col items-center justify-center text-center backface-hidden">
+                            <span class="text-deepRose font-bold text-xs">${r.title}</span>
+                            <span class="text-[10px] text-gray-400 mt-1">Tap card 👆</span>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-br from-rose to-deepRose text-white rounded-2xl p-2.5 flex items-center justify-center text-center backface-hidden rotate-y-180">
+                            <p class="text-[10px] font-medium leading-snug">${r.text}</p>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function goToStep(stepNumber) {
+            currentStep = stepNumber;
+            document.querySelectorAll('.step-container').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`step${stepNumber}`).classList.remove('hidden');
+
+            document.getElementById('stepCounterText').innerText = `Step ${stepNumber} of 10`;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (stepNumber === 10) {
+                triggerConfettiExplosion();
+            }
+        }
+
+        function openEnvelope() {
+            confetti({
+                particleCount: 60,
+                spread: 60,
+                origin: { y: 0.6 }
+            });
+            setTimeout(() => {
+                goToStep(2);
+            }, 400);
+        }
+
+        function answerQuiz(btn, feedbackText) {
+            const fb = document.getElementById('quizFeedback');
+            fb.innerText = feedbackText;
+            fb.classList.remove('hidden');
+        }
+
+        function updateForeverMeter(val) {
+            selectedYears = val;
+            const valDisplay = document.getElementById('foreverValue');
+            const label = document.getElementById('foreverLabel');
+            const desc = document.getElementById('foreverDescription');
+            const contractDisplay = document.getElementById('contractYearsDisplay');
+
+            if (val == 100) {
+                valDisplay.innerText = "Forever & Ever ♾️";
+                label.innerText = "Deal! Forever & Ever, Madam Ji! 💖";
+                desc.innerText = `"From silly jokes to supporting each other like real siblings, Cutiee makes every single year so bright!"`;
+                contractDisplay.innerText = "Forever & Ever (Infinity Years)";
+            } else {
+                valDisplay.innerText = val + " Years";
+                contractDisplay.innerText = val + " Years";
+                if (val > 50) {
+                    label.innerText = "Awesome choice! Decades of friendship! ✨";
+                    desc.innerText = `"So many years ahead full of endless gossips and smile moments!"`;
+                } else if (val > 10) {
+                    label.innerText = "10+ Years? Keep scrolling up to Forever, Cutiee! 😉";
+                    desc.innerText = `"Our bond goes way beyond time! Scroll to maximum!"`;
+                } else {
+                    label.innerText = "Hey! That's too short for Madam Ji! Scroll higher! ❤️";
+                    desc.innerText = `"We are best friends and siblings for life! Scroll to Forever!"`;
+                }
+            }
+        }
+
+        function sealPromise() {
+            document.getElementById('contractSignedBadge').classList.remove('hidden');
+            const btn = document.getElementById('signPromiseBtn');
+            btn.innerHTML = `<i class="fa-solid fa-check-circle"></i> Promise Sealed Forever ✨`;
+            btn.className = "w-full py-3.5 bg-emerald-600 text-white rounded-2xl font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2";
+
+            confetti({
+                particleCount: 60,
+                spread: 60,
+                origin: { y: 0.7 }
+            });
+        }
+
+        const fortunes = [
+            "✨ Madam Ji will have a year filled with maximum smiles and zero worries!",
+            "🌸 Cutiee's dream wishes are coming true faster than expected!",
+            "💖 Endless laughter, healthy vibes, and happiness will follow Oishi everywhere!",
+            "⭐ Your warmth will continue to make everyone around you so happy!"
+        ];
+
+        function revealFortune() {
+            const random = fortunes[Math.floor(Math.random() * fortunes.length)];
+            const box = document.getElementById('fortuneBox');
+            box.innerText = random;
+
+            confetti({
+                particleCount: 30,
+                spread: 50,
+                origin: { y: 0.6 }
+            });
+        }
+
+        function blowCandle() {
+            const flame = document.getElementById('candleFlame');
+            const wishMsg = document.getElementById('wishMessage');
+            const btn = document.getElementById('blowBtn');
+
+            if (!isCandleBlown) {
+                flame.style.display = 'none';
+                wishMsg.classList.remove('hidden');
+                btn.innerText = '✨ Candle Blown! Happy Birthday Oishi! 🎉';
+                isCandleBlown = true;
+
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        function addLove(type) {
+            if (type === 'hug') {
+                hugCount++;
+                document.getElementById('hugCount').innerText = hugCount;
+            } else {
+                headpatCount++;
+                document.getElementById('headpatCount').innerText = headpatCount;
+            }
+
+            confetti({
+                particleCount: 15,
+                spread: 40,
+                origin: { y: 0.7 }
+            });
+        }
+
+        function sendWishToUniverse() {
+            const text = document.getElementById('userWishText').value;
+            if (!text.trim()) {
+                alert("Please write a wish first, Madam Ji!");
+                return;
+            }
+
+            document.getElementById('wishSentAlert').classList.remove('hidden');
+
+            confetti({
+                particleCount: 70,
+                spread: 80,
+                origin: { y: 0.5 }
+            });
+        }
+
+        function triggerConfettiExplosion() {
+            const duration = 2.5 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            })();
+        }
+
+        window.onload = function() {
+            renderReasons();
+        };
+    </script>
+</body>
+</html>
